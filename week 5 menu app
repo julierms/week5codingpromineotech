@@ -1,0 +1,142 @@
+class Drink {
+    constructor (name, type) {
+        this.name = name;
+        this.type = type; 
+    }
+
+    describe () {
+        return `${this.name} plays ${this.type}.`;
+    }
+}
+
+class Boba {
+    constructor(name) {
+        this.name = name;
+        this.drinks = [];
+    }
+
+    addDrink(drink) {
+        if (drink instanceof Drink){
+            this.drink.push(drink);
+        } else {
+            throw new Error (` You can only add an instance of Drink. Argument is not a drink: ${drink}`);
+        }
+    }
+
+    describe() {
+        return `${this.name} has ${this.drinks.length} drinks.`;
+    }
+}
+
+
+class Menu{
+    constructor(){
+        this.bobas=[];
+        this.selectedBoba = null;
+    }
+
+    start() {
+        let selection = this.showMainMenuOptions();
+        while (selection != 0){
+            switch (selection) {
+                case '1':
+                    this.createBoba();
+                    break;
+                case '2':
+                    this.viewBoba();
+                    break;
+                case '3':
+                    this.deleteBoba();
+                    break;
+                case '4':
+                    this.displayBobas();
+                    break;
+                default: 
+                    selection = 0 ;
+            }
+            selection = this.showMainMenuOptions();
+        }
+
+        alert('Have a great day!');
+    }
+
+    showMainMenuOptions() {
+        return prompt(`
+        0) exit
+        1) create new Boba
+        2) view Boba
+        3) delete Boba 
+        4) display all Bobas
+        `);
+    } 
+
+    showBobaMenuOptions(groupInfo) {
+        return prompt (`
+        0) back
+        1) create Drink
+        2) delete Drink 
+        -------------------
+        ${bobaInfo}
+        `);
+    }
+
+    displayBobas() {
+        let bobaString = '';
+        for (let i = 0; i < this.bobas.length; i++) {
+            bobaString += i + ') ' + this.bobas[i].name + '\n';
+        }
+        alert (bobaString);
+    }
+
+    createBoba() {
+        let name = prompt(`Enter name for Boba: `);
+        this.bobas.push(new Boba(name));
+    }
+
+    viewBoba() {
+        let index = prompt(`Enter the index of the boba you wish to view: `);
+        if (index > -1 && index < this.bobas.length) {
+            this.selectedBoba= this.bobas[index];
+            let description = ' Boba Name: ' + this.selectedBoba.name + '\n';
+
+            for (let i = 0; i < this.selectedBoba.assets.length; i++){
+                description += i + ') ' + this.selectedBoba.assets[i].name + ' - ' + this.selectedGroup.assets[i].type + '\n'; 
+            }
+
+            let selection = this.showBobaMenuOptions(description);
+            switch (selection) {
+                case '1':
+                    this.createDrink();
+                    break;
+                case '2':
+                    this.deleteDrink();
+            }
+        }
+    }
+
+    deleteBoba() {
+        let index = prompt ('Enter the index of the boba you wich to delete');
+        if (index > -1 && index < this.bobas.length) {
+            this.bobas.splice(index, 1);
+        }
+    }
+
+    createBoba() {
+        let name = prompt('Enter name for boba');
+        let ice = prompt('Enter ice levels for boba');
+        let sweetness = prompt('Enter sweetness level for boba')
+        this.selectedBoba.assets.push(new Drink(name, ice, sweetness));
+         }
+
+         deleteDrink() {
+             let index = prompt('Enter the index of the drink you wish to delete: ');
+             if (index > -1 && index < this.selectedBoba.drinks.length) {
+                 this.selectedBoba.drinks.splice(index, 1);             
+         }
+    }
+
+}
+
+
+let menu = new Menu();
+menu.start();
